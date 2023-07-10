@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Data</title>
+</head>
+<body>
+  <h1>Student Information</h1>
+  <div id="studentData"></div>
+
+  <script>
+    class Student {
+      constructor(name, address, phone, course) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.course = course;
+      }
+
+      getInfo() {
+        return `Name: ${this.name}<br>Address: ${this.address}<br>Phone: ${this.phone}<br>Course: ${this.course}<br><br>`;
+      }
+    }
+
+    fetch('https://v-dresevic.github.io/Advanced-JavaScript-Programming/data/students.txt')
+      .then(response => response.text())
+      .then(data => {
+
+        const studentDataArray = data.split('\n');
+
+        const students = [];
+
+        for (let i = 0; i < studentDataArray.length; i += 4) {
+          const name = studentDataArray[i];
+          const address = studentDataArray[i + 1];
+          const phone = studentDataArray[i + 2];
+          const course = studentDataArray[i + 3];
+
+          const student = new Student(name, address, phone, course);
+          students.push(student);
+        }
+
+        const studentDataDiv = document.getElementById('studentData');
+        students.forEach(student => {
+          studentDataDiv.innerHTML += student.getInfo();
+        });
+      })
+      .catch(error => {
+        console.log('An error occurred:', error);
+      });
+  </script>
+</body>
+</html>

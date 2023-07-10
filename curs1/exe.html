@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Data</title>
+</head>
+<body>
+  <h1>Student Information</h1>
+  <div id="studentData"></div>
+
+  <script>
+    // Define the Student class
+    class Student {
+      constructor(name, address, phone, course) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.course = course;
+      }
+
+      getInfo() {
+        return `Name: ${this.name}<br>Address: ${this.address}<br>Phone: ${this.phone}<br>Course: ${this.course}<br><br>`;
+      }
+    }
+
+    // Fetch the student data file
+    fetch('https://v-dresevic.github.io/Advanced-JavaScript-Programming/data/students.txt')
+      .then(response => response.text())
+      .then(data => {
+        // Split the text into individual student data
+        const studentDataArray = data.split('\n');
+
+        // Create an array to hold the Student objects
+        const students = [];
+
+        // Iterate through the student data and create Student objects
+        for (let i = 0; i < studentDataArray.length; i += 4) {
+          const name = studentDataArray[i];
+          const address = studentDataArray[i + 1];
+          const phone = studentDataArray[i + 2];
+          const course = studentDataArray[i + 3];
+
+          // Create a new Student object and add it to the students array
+          const student = new Student(name, address, phone, course);
+          students.push(student);
+        }
+
+        // Display the student information on the page
+        const studentDataDiv = document.getElementById('studentData');
+        students.forEach(student => {
+          studentDataDiv.innerHTML += student.getInfo();
+        });
+      })
+      .catch(error => {
+        console.log('An error occurred:', error);
+      });
+  </script>
+</body>
+</html>
