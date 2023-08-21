@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="my-canvas" width="400" height="250">
+        Your web browser does not support canvas element.
+    </canvas>
+ 
+    <script>
+        window.onload = draw;
+ 
+        function draw() {
+            let myCanvas = document.getElementById("my-canvas");
+            if (myCanvas.getContext) {
+                var ctx = myCanvas.getContext('2d');
+                var img = new Image();
+                img.addEventListener('load', function () {
+                    ctx.drawImage(img, 0, 0);
+                }, false);
+                img.src = 'enemy.png';
+            } else {
+                alert("Canvas is not supported.");
+            }
+        }
+    </script>
+
+</body>
+</html>
