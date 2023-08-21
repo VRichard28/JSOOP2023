@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #my-canvas {
+            border: #cacaca 1px solid;
+        }
+        </style>
+</head>
+<body>
+    <canvas id="my-canvas" width="400" height="300">
+        Your web browser does not support canvas element.
+    </canvas>
+    <script>
+    window.onload = draw;
+        function draw() {
+            let myCanvas = document.getElementById("my-canvas");
+            if (myCanvas.getContext) {
+                var ctx = myCanvas.getContext('2d');
+                makePieChart(ctx, [10, 10, 30, 20, 30]);
+            } else {
+                alert("Canvas is not supported.");
+            }
+        }
+        function makePieChart(ctx, shares) {
+            let sum = shares.reduce((a, b) => a + b, 0);
+            if (sum !== 100)
+                throw new Error("Sum of all shares must be 100.");
+            let startAngle = 0;
+            for (let i = 0; i < shares.length; i++) {
+                let endAngle = startAngle + (Math.PI / 180) * shares[i] * 3.6;
+                let red = Math.floor(Math.random() * 256);
+                let green = Math.floor(Math.random() * 256);
+                let blue = Math.floor(Math.random() * 256);
+                ctx.fillStyle = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                ctx.beginPath();
+                ctx.arc(200, 150, 120, startAngle, endAngle);
+                ctx.lineTo(200, 150);
+                ctx.fill();
+                startAngle = endAngle;
+            }
+        }
+    </script>
+</body>
+</html>
