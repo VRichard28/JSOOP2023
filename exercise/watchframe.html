@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Watch with Numbers</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
+</head>
+<body>
+    <canvas id="watchCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const stage = new createjs.Stage("watchCanvas");
+
+        // Create the watch face
+        const watchFace = new createjs.Shape();
+        watchFace.graphics.beginFill("#f0f0f0").drawCircle(200, 200, 150);
+        stage.addChild(watchFace);
+
+        // Create the black watch frame
+        const watchFrame = new createjs.Shape();
+        watchFrame.graphics.setStrokeStyle(2).beginStroke("#000").drawCircle(200, 200, 152);
+        stage.addChild(watchFrame);
+
+        // Function to add numbers around the watch face
+        function addNumbers() {
+            const radius = 120; // Radius for placing the numbers
+            const numberFont = "20px Arial";
+
+            for (let i = 1; i <= 12; i++) {
+                const angle = ((i - 3) * 30) * (Math.PI / 180); // Calculate angle in radians
+                const x = 200 + radius * Math.cos(angle);
+                const y = 200 + radius * Math.sin(angle);
+
+                const text = new createjs.Text(i.toString(), numberFont, "#000");
+                text.textAlign = "center";
+                text.x = x;
+                text.y = y;
+                stage.addChild(text);
+            }
+        }
+
+        // Function to update watch hands with animation
+        function updateWatch() {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const hourRotation = (360 / 12) * (hours + minutes / 60);
+            const minuteRotation = (360 / 60) * (minutes + seconds / 60);
+            const secondRotation = (360 / 60) * seconds;
+
+            // Use TweenJS to animate the watch hands
+            createjs.Tween.get(hourHand).to({ rotation: hourRotation }, 1000, createjs.Ease.quadOut);
+            createjs.Tween.get(minuteHand).to({ rotation: minuteRotation }, 1000, createjs.Ease.quadOut);
+            createjs.Tween.get(secondHand).to({ rotation: secondRotation }, 1000, createjs.Ease.quadOut);
+
+            stage.update();
+        }
+
+        addNumbers(); // Add numbers to the watch face
+        updateWatch(); // Initial update
+
+        // Update the watch every second
+        setInterval(updateWatch, 1000);
+    </script>
+</body>
+</html>
