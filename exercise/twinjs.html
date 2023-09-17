@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Watch with TweenJS</title>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
+</head>
+<body>
+    <canvas id="watchCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const stage = new createjs.Stage("watchCanvas");
+
+        // Create the watch face
+        const watchFace = new createjs.Shape();
+        watchFace.graphics.beginFill("yellow").drawCircle(200, 200, 150);
+        stage.addChild(watchFace);
+
+        // Create the hour hand
+        const hourHand = new createjs.Shape();
+        hourHand.graphics.beginFill("#000").drawRect(0, 0, 10, 80);
+        hourHand.regX = 5;
+        hourHand.regY = 40;
+        hourHand.x = 200;
+        hourHand.y = 200;
+        stage.addChild(hourHand);
+
+        // Create the minute hand
+        const minuteHand = new createjs.Shape();
+        minuteHand.graphics.beginFill("red").drawRect(0, 0, 6, 120);
+        minuteHand.regX = 3;
+        minuteHand.regY = 110;
+        minuteHand.x = 200;
+        minuteHand.y = 200;
+        stage.addChild(minuteHand);
+
+        // Create the second hand
+        const secondHand = new createjs.Shape();
+        secondHand.graphics.beginFill("green").drawRect(0, 0, 2, 130);
+        secondHand.regX = 1;
+        secondHand.regY = 125;
+        secondHand.x = 200;
+        secondHand.y = 200;
+        stage.addChild(secondHand);
+
+        createjs.Ticker.addEventListener("tick", handleTick);
+        createjs.Ticker.setFPS(30); // Update every frame
+
+        function handleTick(event) {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const hourRotation = (360 / 12) * (hours + minutes / 60);
+            const minuteRotation = (360 / 60) * (minutes + seconds / 60);
+            const secondRotation = (360 / 60) * seconds;
+
+            // Animate the watch hands using TweenJS
+            createjs.Tween.get(hourHand).to({ rotation: hourRotation }, 1000);
+            createjs.Tween.get(minuteHand).to({ rotation: minuteRotation }, 1000);
+            createjs.Tween.get(secondHand).to({ rotation: secondRotation }, 1000);
+
+            stage.update();
+        }
+    </script>
+</body>
+</html>
